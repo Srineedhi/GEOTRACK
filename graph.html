@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Eco Track</title>
+    <link rel="stylesheet" href="shared.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .graph-container-page {
+            padding-top: 3rem;
+            padding-bottom: 5rem;
+        }
+
+        /* Comparison Section */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .comparison-box {
+            background: var(--bg-white);
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid rgba(16, 185, 129, 0.05);
+        }
+
+        .comparison-box.before {
+            border-left: 6px solid #94a3b8;
+        }
+
+        .comparison-box.after {
+            border-left: 6px solid var(--primary);
+            background: linear-gradient(to right bottom, var(--bg-white), var(--sage));
+        }
+
+        .comp-label {
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .comp-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .before .comp-value {
+            color: #64748b;
+        }
+
+        .after .comp-value {
+            color: var(--primary-dark);
+        }
+
+        .comp-unit {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        /* Savings Banner */
+        .savings-banner {
+            grid-column: span 2;
+            background: var(--forest);
+            color: var(--bg-white);
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-strong);
+        }
+
+        .savings-info h3 {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* Graph Card Customization */
+        .chart-wrapper {
+            height: 400px;
+            margin-top: 2rem;
+        }
+
+        .history-card {
+            margin-top: 4rem;
+        }
+
+        /* Graph Card Customization */
+        .chart-wrapper {
+            height: 400px;
+            margin-top: 2rem;
+        }
+
+        .history-card {
+            margin-top: 4rem;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .savings-banner {
+                grid-column: span 1;
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.jpg" alt="Eco Track Logo">
+                <span>Eco Track</span>
+            </a>
+            <div class="user-info">
+                <a href="dashboard.html" class="btn btn-outline" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;">Back
+                    to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container graph-container-page">
+        <header style="margin-bottom: 3rem;">
+            <h1 class="page-title">Impact Analytics</h1>
+            <p class="page-subtitle">Visualizing your journey towards a carbon-neutral lifestyle.</p>
+        </header>
+
+        <div class="comparison-layout">
+            <div class="comparison-box before">
+                <span class="comp-label">Household Average</span>
+                <span class="comp-value" id="beforeValue">500</span>
+                <span class="comp-unit">kg CO₂e / Month</span>
+            </div>
+            <div class="comparison-box after">
+                <span class="comp-label">Your Current Impact</span>
+                <span class="comp-value" id="afterValue">0</span>
+                <span class="comp-unit" id="afterUnit">kg CO₂e / Month</span>
+            </div>
+            <div class="savings-banner">
+                <div class="savings-info">
+                    <h3>Total Carbon Offset</h3>
+                    <p>You have prevented this much CO₂ from entering the atmosphere.</p>
+                </div>
+                <div style="text-align: right;">
+                    <span id="savingsValue" style="font-size: 3rem; font-weight: 800; color: var(--accent);">0</span>
+                    <span style="font-size: 1.2rem; font-weight: 600;">kg CO₂e</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h3>📊 Emission Trends</h3>
+                <select id="graphPeriod" onchange="updateGraph()"
+                    style="padding: 0.6rem 1rem; border-radius: 0.5rem; border: 1px solid #e2e8f0; font-family: inherit;">
+                    <option value="6">Last 6 Months</option>
+                    <option value="12">Last 12 Months</option>
+                </select>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="emissionChart"></canvas>
+            </div>
+            <div
+                style="display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; font-size: 0.9rem; font-weight: 500;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="width: 12px; height: 12px; border-radius: 3px; background: #10b981;"></span> Your
+                    Impact
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="width: 12px; height: 12px; border-radius: 3px; background: #94a3b8;"></span> Global
+                    Average
+                </div>
+            </div>
+        </div>
+
+        <div class="card history-card">
+            <h3 style="margin-bottom: 0.5rem;">📋 Detailed History</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Categorized breakdown of your logged activities.</p>
+
+            <div style="overflow-x: auto;">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>⚡ Electricity</th>
+                            <th>🔥 Gas</th>
+                            <th>🛒 Grocery</th>
+                            <th style="color: var(--primary-dark);">Total Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody">
+                        <!-- History will be loaded here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <p class="no-data" id="noDataMessage" style="display: none;">No footprint logs found. Start by scanning a
+                bill or using the calculator!</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        checkAuth();
+        loadGraph();
+        loadHistory();
+    </script>
+</body>
+
+</html>

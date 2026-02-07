@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Eco Track</title>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, var(--sage) 0%, var(--bg-main) 100%);
+            padding: 2rem;
+        }
+
+        .auth-card {
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .auth-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .auth-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-logo img {
+            height: 50px;
+            border-radius: 12px;
+        }
+
+        .auth-logo span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--forest);
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--forest);
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            background: var(--bg-main);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--bg-white);
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .auth-footer {
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .auth-footer a {
+            color: var(--primary-dark);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card auth-card">
+        <div class="auth-header">
+            <a href="index.html" class="auth-logo">
+                <img src="assets/logo.jpg" alt="Eco Track Logo">
+                <span>Eco Track</span>
+            </a>
+            <h2 style="font-size: 1.8rem; margin-top: 1rem;">Welcome back, explorer!</h2>
+            <p style="color: var(--text-muted);">Continue your journey towards sustainability.</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required placeholder="Your username">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Your secure password">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.2rem; font-size: 1.1rem;">Sign
+                In</button>
+        </form>
+
+        <p class="auth-footer">
+            New to Eco Track? <a href="register.html">Start your mission here</a>
+        </p>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            loginUser();
+        });
+    </script>
+</body>
+
+</html>

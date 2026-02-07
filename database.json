@@ -1,0 +1,701 @@
+{
+  "users": [
+    {
+      "id": "1770221698523",
+      "name": "API Test",
+      "email": "api@test.com",
+      "username": "apitest2",
+      "password": "pass123",
+      "accountType": "individual",
+      "ecoCoins": 460,
+      "joinedDate": "2026-02-04T16:14:58.523Z"
+    },
+    {
+      "id": "1770221866976",
+      "name": "dxfghjk",
+      "email": "srieerie@gmail.com",
+      "username": "tfygvbuhjn",
+      "password": "1234567890",
+      "accountType": "individual",
+      "gender": "male",
+      "ecoCoins": 100,
+      "joinedDate": "2026-02-04T16:17:46.976Z"
+    },
+    {
+      "id": "1770221920482",
+      "name": "Sri",
+      "email": "lingeshraj07@gmail.com",
+      "username": "deeps_sia",
+      "password": "1234567890",
+      "accountType": "individual",
+      "gender": "male",
+      "ecoCoins": 100,
+      "joinedDate": "2026-02-04T16:18:40.482Z"
+    },
+    {
+      "id": "1770224233331",
+      "name": "dfgh",
+      "email": "lopez341@gmail.com",
+      "username": "co",
+      "password": "123456",
+      "accountType": "individual",
+      "gender": "prefer-not-to-say",
+      "ecoCoins": 100,
+      "joinedDate": "2026-02-04T16:57:13.331Z"
+    },
+    {
+      "id": "1770226065323",
+      "name": "Sri",
+      "email": "zaarafarhana786@gmail.com",
+      "username": "com",
+      "password": "12345",
+      "accountType": "individual",
+      "gender": "male",
+      "ecoCoins": 100,
+      "joinedDate": "2026-02-04T17:27:45.323Z"
+    },
+    {
+      "id": "1770226671005",
+      "name": "Sri",
+      "email": "lopez341@gmail.com",
+      "username": "comm",
+      "password": "12345",
+      "accountType": "family",
+      "gender": "female",
+      "ecoCoins": 100,
+      "joinedDate": "2026-02-04T17:37:51.005Z"
+    }
+  ],
+  "emissions": [
+    {
+      "id": "1770221750740",
+      "date": "2026-02-04T16:15:50.741Z",
+      "category": "electricity",
+      "totalEmissions": 85,
+      "details": {
+        "units": 100
+      }
+    },
+    {
+      "id": "1770221982040",
+      "date": "2026-02-04T16:19:42.040Z",
+      "category": "grocery",
+      "totalEmissions": 1.75,
+      "details": {
+        "items": [
+          {
+            "name": "Detected Item 1",
+            "quantity": 2,
+            "unit": "units"
+          },
+          {
+            "name": "Detected Item 2",
+            "quantity": 1.5,
+            "unit": "kg"
+          }
+        ],
+        "bagType": "THIN_PLASTIC"
+      }
+    },
+    {
+      "id": "1770221985097",
+      "date": "2026-02-04T16:19:45.097Z",
+      "category": "grocery",
+      "totalEmissions": 1.75,
+      "details": {
+        "items": [
+          {
+            "name": "Detected Item 1",
+            "quantity": 2,
+            "unit": "units"
+          },
+          {
+            "name": "Detected Item 2",
+            "quantity": 1.5,
+            "unit": "kg"
+          }
+        ],
+        "bagType": "THIN_PLASTIC"
+      }
+    },
+    {
+      "id": "1770222245759",
+      "date": "2026-02-04T16:24:05.759Z",
+      "category": "electricity",
+      "totalEmissions": 425,
+      "details": {
+        "units": 500
+      }
+    },
+    {
+      "id": "1770223738080",
+      "date": "2026-02-04T16:48:58.080Z",
+      "category": "grocery",
+      "totalEmissions": 1.75,
+      "details": {
+        "items": [
+          {
+            "name": "Detected Item 1",
+            "quantity": 2,
+            "unit": "units"
+          },
+          {
+            "name": "Detected Item 2",
+            "quantity": 1.5,
+            "unit": "kg"
+          }
+        ],
+        "bagType": "THIN_PLASTIC"
+      }
+    },
+    {
+      "id": "1770223740772",
+      "date": "2026-02-04T16:49:00.772Z",
+      "category": "grocery",
+      "totalEmissions": 1.75,
+      "details": {
+        "items": [
+          {
+            "name": "Detected Item 1",
+            "quantity": 2,
+            "unit": "units"
+          },
+          {
+            "name": "Detected Item 2",
+            "quantity": 1.5,
+            "unit": "kg"
+          }
+        ],
+        "bagType": "THIN_PLASTIC"
+      }
+    },
+    {
+      "id": "1770223949320",
+      "date": "2026-02-04T16:52:29.320Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "NONE"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770223972586",
+      "date": "2026-02-04T16:52:52.586Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "NONE"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770224305835",
+      "date": "2026-02-04T16:58:25.835Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "THICK_PLASTIC"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770224312674",
+      "date": "2026-02-04T16:58:32.674Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "THICK_PLASTIC"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770225173959",
+      "date": "2026-02-04T17:12:53.959Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "NONE"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770225177057",
+      "date": "2026-02-04T17:12:57.057Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "NONE"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770225222894",
+      "date": "2026-02-04T17:13:42.894Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "NONE"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770225225888",
+      "date": "2026-02-04T17:13:45.888Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "NONE"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770226163507",
+      "date": "2026-02-04T17:29:23.507Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "NONE"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770226192059",
+      "date": "2026-02-04T17:29:52.059Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "NONE"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770226773265",
+      "date": "2026-02-04T17:39:33.265Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "THICK_PLASTIC"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    },
+    {
+      "id": "1770226804004",
+      "date": "2026-02-04T17:40:04.004Z",
+      "category": "grocery",
+      "totalEmissions": 255.5,
+      "details": {
+        "items": [
+          {
+            "name": "Organic Apples",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Milk (Dairy)",
+            "quantity": 2,
+            "unit": "L"
+          },
+          {
+            "name": "Rice (Basmati)",
+            "quantity": 5,
+            "unit": "kg"
+          },
+          {
+            "name": "Chicken Breast",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "Single-Use Plastic Bags",
+            "quantity": 3,
+            "unit": "pcs"
+          }
+        ],
+        "bagType": "THICK_PLASTIC"
+      },
+      "analysis": {
+        "statusLabel": "Danger - High Impact",
+        "suggestions": [
+          "Avoid single-use plastics; they add significant hidden carbon costs.",
+          "Buy local and seasonal produce to cut transport emissions.",
+          "Reduce meat consumption; plant-based diets have lower footprints."
+        ]
+      }
+    }
+  ]
+}

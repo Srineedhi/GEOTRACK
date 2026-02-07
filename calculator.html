@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator - Eco Track</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        .calculator-container {
+            padding-top: 3rem;
+            padding-bottom: 5rem;
+        }
+
+        .calc-header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .calc-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .calc-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .calc-section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            background: var(--sage);
+            transition: var(--transition);
+            margin-bottom: 2rem;
+        }
+
+        .upload-area:hover {
+            background: var(--bg-white);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .item-input-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: var(--bg-main);
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+
+        .item-input-row input,
+        .item-input-row select {
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .table-container {
+            background: var(--bg-white);
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--sage);
+            color: var(--forest);
+            text-align: left;
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-top: 1px solid rgba(16, 185, 129, 0.05);
+        }
+
+        .results-section {
+            background: var(--forest);
+            color: var(--bg-white);
+            padding: 3rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin-top: 4rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .results-section h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .result-display {
+            margin-bottom: 2rem;
+        }
+
+        .result-value {
+            font-size: 4rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .result-unit {
+            font-size: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .result-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .breakdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .item-input-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.jpg" alt="Eco Track Logo">
+                <span>Eco Track</span>
+            </a>
+            <div class="user-info">
+                <div class="coin-display" id="coinBalance" onclick="redeemCoins()" title="Click to Redeem"
+                    style="cursor: pointer; margin-right: 1rem;">
+                    <span class="coin-icon">🪙</span>
+                    <span id="userCoins">100</span>
+                </div>
+                <a href="dashboard.html" class="btn btn-outline" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;">Back
+                    to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container calculator-container">
+        <header class="calc-header">
+            <h1 class="page-title" id="calculatorTitle">Monthly Emission Hub</h1>
+            <p class="page-subtitle" id="calculatorSubtitle">Quantifying your impact with precision.</p>
+        </header>
+
+        <div class="card">
+            <form id="calculatorForm">
+                <!-- Grocery Section -->
+                <div class="calc-section" id="grocerySection" style="display: none;">
+                    <h3>🛒 Grocery Analysis</h3>
+                    <p class="subtitle">Understand the carbon cost of your food & supplies.</p>
+
+                    <div class="upload-area" id="groceryUploadArea">
+                        <div class="upload-placeholder" onclick="document.getElementById('groceryBill').click()">
+                            <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">📄</span>
+                            <p style="font-weight: 600;">Scan Grocery Bill</p>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">AI will automatically extract and
+                                categorize items</p>
+                        </div>
+                        <input type="file" id="groceryBill" style="display: none;" onchange="handleBillUpload(event)">
+                    </div>
+
+                    <div id="groceryItems">
+                        <h4 style="margin-bottom: 1rem;">Manual Entry / Refinement</h4>
+                        <div class="item-input-row">
+                            <input type="text" id="itemName" placeholder="Item Name (e.g. Basmati Rice)">
+                            <input type="number" id="itemQty" placeholder="Qty">
+                            <select id="itemUnit">
+                                <option value="kg">kg</option>
+                                <option value="g">g</option>
+                                <option value="l">L</option>
+                                <option value="ml">ml</option>
+                                <option value="packet">packs</option>
+                                <option value="piece">pcs</option>
+                            </select>
+                            <button type="button" class="btn btn-primary" onclick="addGroceryItem()">Add Item</button>
+                        </div>
+
+                        <div class="table-container">
+                            <table id="itemTable">
+                                <thead>
+                                    <tr>
+                                        <th>Item Name</th>
+                                        <th>Impact Category</th>
+                                        <th>Quantity</th>
+                                        <th style="text-align: center;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemTableBody">
+                                    <!-- Items will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 3rem;">
+                        <label for="bagType" style="font-weight: 600; color: var(--forest);">🛍️ Carry Bag
+                            Selection</label>
+                        <select id="bagType" style="margin-top: 0.5rem; background: var(--bg-main);">
+                            <option value="NONE">No Bag (Eco-friendly!)</option>
+                            <option value="THIN_PLASTIC">Thin Plastic (High Impact)</option>
+                            <option value="THICK_PLASTIC">Thick Plastic (Medium Impact)</option>
+                            <option value="PAPER">Paper Bag (Low Impact)</option>
+                            <option value="CLOTH">Cloth Bag (Reusable)</option>
+                        </select>
+                    </div>
+
+                    <!-- Grocery History Section -->
+                    <div class="history-section"
+                        style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid rgba(16, 185, 129, 0.1);">
+                        <h4
+                            style="color: var(--forest); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            📊 Recent Grocery Scans
+                        </h4>
+                        <div id="groceryHistory"
+                            style="background: var(--bg-white); border-radius: 12px; padding: 1rem; min-height: 100px;">
+                            <p style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading history...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Electricity Section -->
+                <div class="calc-section" id="electricitySection" style="display: none;">
+                    <h3>⚡ Energy Consumption</h3>
+                    <p class="subtitle">Log your electricity usage to calculate grid-based emissions.</p>
+
+                    <div class="upload-area" id="electricityUploadArea">
+                        <div class="upload-placeholder" onclick="document.getElementById('electricityBill').click()">
+                            <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">⚡</span>
+                            <p style="font-weight: 600;">Smart Scan Electricity Bill</p>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">Extract units automatically from
+                                your utility bill</p>
+                        </div>
+                        <input type="file" id="electricityBill" style="display: none;"
+                            onchange="handleBillUpload(event)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="electricityUnits">Manual Units Consumed (kWh)</label>
+                        <input type="number" id="electricityUnits" placeholder="Enter kWh from your bill" min="0"
+                            style="margin-top: 0.5rem; background: var(--bg-main);">
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Average households
+                            use 150-400 kWh monthly.</p>
+                    </div>
+
+                    <!-- Electricity History Section -->
+                    <div class="history-section"
+                        style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid rgba(16, 185, 129, 0.1);">
+                        <h4
+                            style="color: var(--forest); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            📊 Recent Electricity Scans
+                        </h4>
+                        <div id="electricityHistory"
+                            style="background: var(--bg-white); border-radius: 12px; padding: 1rem; min-height: 100px;">
+                            <p style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading history...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gas Section -->
+                <div class="calc-section" id="gasSection" style="display: none;">
+                    <h3>🔥 Cooking Fuel</h3>
+                    <p class="subtitle">Monitor gas usage from cylinders or piped connections.</p>
+
+                    <div class="upload-area" id="gasUploadArea">
+                        <div class="upload-placeholder" onclick="document.getElementById('gasBill').click()">
+                            <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🔥</span>
+                            <p style="font-weight: 600;">Smart Scan Gas Bill/Receipt</p>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">Automatically detect SCM units or
+                                KG refill weight</p>
+                        </div>
+                        <input type="file" id="gasBill" style="display: none;" onchange="handleBillUpload(event)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gasKg">Manual Gas Consumption (kg/SCM)</label>
+                        <input type="number" id="gasKg" placeholder="e.g. 14.2 for full cylinder" min="0" step="0.1"
+                            style="margin-top: 0.5rem; background: var(--bg-main);">
+                    </div>
+
+                    <!-- Gas History Section -->
+                    <div class="history-section"
+                        style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid rgba(16, 185, 129, 0.1);">
+                        <h4
+                            style="color: var(--forest); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            📊 Recent Gas Scans
+                        </h4>
+                        <div id="gasHistory"
+                            style="background: var(--bg-white); border-radius: 12px; padding: 1rem; min-height: 100px;">
+                            <p style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading history...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="calculatorActions" style="display: none; margin-top: 3rem;">
+                    <button type="button" class="btn btn-primary"
+                        style="width: 100%; padding: 1.2rem; font-size: 1.1rem;" onclick="calculateSelectedFootprint()">
+                        Calculate Total Impact
+                    </button>
+                </div>
+            </form>
+
+            <!-- Results Section -->
+            <div id="results" class="results-section" style="display: none;">
+                <h3>Calculated Carbon Footprint</h3>
+                <div class="result-display">
+                    <span class="result-value" id="totalResult">0</span>
+                    <span class="result-unit">kg CO₂e</span>
+                </div>
+                <div class="result-breakdown" id="detailedResultBreakdown">
+                    <!-- Breakdown injected here -->
+                </div>
+                <button class="btn btn-secondary"
+                    style="background: var(--accent); color: var(--forest); font-weight: 700; padding: 1rem 2.5rem;"
+                    onclick="saveEmissions()">💾 Commit to History</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="ocr.js"></script>
+    <script src="calculator-logic.js"></script>
+    <script>
+        checkAuth();
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const type = urlParams.get('type') || 'grocery';
+            initCalculatorType(type);
+        });
+    </script>
+</body>
+
+</html>

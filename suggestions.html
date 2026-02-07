@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Missions - Eco Track</title>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        .missions-container {
+            padding-top: 3rem;
+            padding-bottom: 5rem;
+        }
+
+        .progress-card {
+            background: var(--forest);
+            color: var(--bg-white);
+            padding: 3rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 4rem;
+            box-shadow: var(--shadow-strong);
+            text-align: center;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-header span:first-child {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .progress-header span:last-child {
+            font-size: 2.5rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            height: 1.5rem;
+            border-radius: 50px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-fill {
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            height: 100%;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 50px;
+        }
+
+        /* Task List */
+        .task-list {
+            list-style: none;
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .task-item {
+            background: var(--bg-white);
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(16, 185, 129, 0.05);
+            transition: var(--transition);
+        }
+
+        .task-item:hover {
+            transform: translateX(10px);
+            border-color: var(--primary);
+        }
+
+        .task-item.completed {
+            background: var(--sage);
+            opacity: 0.8;
+            border-color: var(--primary-light);
+        }
+
+        .task-checkbox {
+            width: 2rem;
+            height: 2rem;
+            border: 2px solid var(--primary);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            background: var(--bg-white);
+        }
+
+        .task-item.completed .task-checkbox {
+            background: var(--primary);
+            color: white;
+        }
+
+        .task-info {
+            flex: 1;
+        }
+
+        .task-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--forest);
+            margin-bottom: 0.25rem;
+        }
+
+        .task-item.completed .task-title {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .task-impact {
+            font-size: 0.85rem;
+            color: var(--primary-dark);
+            font-weight: 600;
+            background: var(--primary-light);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+        }
+
+        .task-date {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Eco Tips */
+        .tips-section {
+            margin-top: 5rem;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .tip-card {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+            border-bottom: 4px solid var(--primary-light);
+            transition: var(--transition);
+        }
+
+        .tip-card:hover {
+            border-bottom-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .tip-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.jpg" alt="Eco Track Logo">
+                <span>Eco Track</span>
+            </a>
+            <div class="user-info">
+                <a href="dashboard.html" class="btn btn-outline" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;">Back
+                    to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container missions-container">
+        <header style="margin-bottom: 3rem;">
+            <h1 class="page-title">Daily Eco Missions</h1>
+            <p class="page-subtitle">Small habits, exponential global impact.</p>
+        </header>
+
+        <div class="progress-card">
+            <div class="progress-header">
+                <span>Today's Completion</span>
+                <span id="progressText">0 / 10 Tasks</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <p style="margin-top: 1.5rem; opacity: 0.8;">Complete all missions to maximize your weekly offset score!</p>
+        </div>
+
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h3>🌱 Active Missions</h3>
+                <span id="currentDate" class="task-date">Loading date...</span>
+            </div>
+
+            <ul class="task-list" id="taskList">
+                <!-- Tasks loaded from script.js -->
+            </ul>
+
+            <div style="margin-top: 3rem; text-align: center; display: flex; gap: 1rem; justify-content: center;">
+                <button class="btn btn-outline" onclick="resetTasks()">Reset</button>
+                <button class="btn btn-primary" onclick="submitMissions()">Submit Daily Missions</button>
+            </div>
+        </div>
+
+        <section class="tips-section">
+            <h2 style="text-align: center; margin-bottom: 0.5rem;">💡 Pro Eco-Tips</h2>
+            <p style="text-align: center; color: var(--text-muted);">Expert advice for deeper reduction.</p>
+
+            <div class="tips-grid">
+                <div class="card tip-card">
+                    <span class="icon">🚲</span>
+                    <h4 style="margin-bottom: 0.5rem;">Active Transit</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Bike or walk for distances under 3km. It's
+                        zero-emission and great for health.</p>
+                </div>
+                <div class="card tip-card">
+                    <span class="icon">🌡️</span>
+                    <h4 style="margin-bottom: 0.5rem;">Climate Control</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Adjusting your AC by just 2°C can reduce
+                        energy impact by up to 15%.</p>
+                </div>
+                <div class="card tip-card">
+                    <span class="icon">🥗</span>
+                    <h4 style="margin-bottom: 0.5rem;">Plant-Forward</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Switching one meal a day to plant-based
+                        saves roughly 3kg of CO₂.</p>
+                </div>
+                <div class="card tip-card">
+                    <span class="icon">💧</span>
+                    <h4 style="margin-bottom: 0.5rem;">Resource Thrift</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Fixing a leaky tap can save 50 liters of
+                        treated water daily.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        checkAuth();
+        loadTasks();
+
+        const today = new Date();
+        document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards Shop - Eco Track</title>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        .rewards-container {
+            padding-top: 3rem;
+            padding-bottom: 5rem;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, var(--forest), #064e3b);
+            color: var(--bg-white);
+            padding: 3rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 4rem;
+            box-shadow: var(--shadow-strong);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .balance-amount {
+            font-size: 4rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .reward-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reward-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-strong);
+            border-color: var(--primary);
+        }
+
+        .reward-image {
+            height: 200px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: var(--text-muted);
+        }
+
+        .reward-content {
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reward-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--forest);
+        }
+
+        .reward-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .reward-price {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .price-tag {
+            font-weight: 800;
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-redeem {
+            background: var(--forest);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-redeem:hover:not(:disabled) {
+            background: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .btn-redeem:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .modal-success {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .confetti {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.jpg" alt="Eco Track Logo">
+                <span>Eco Track</span>
+            </a>
+            <div class="user-info">
+                <div class="coin-display" style="background: rgba(16, 185, 129, 0.1);">
+                    <span class="coin-icon">🪙</span>
+                    <span id="headerCoins">0</span>
+                </div>
+                <a href="dashboard.html" class="btn btn-outline" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;">Back
+                    to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container rewards-container">
+        <header style="margin-bottom: 3rem; text-align: center;">
+            <h1 class="page-title">Eco Rewards Shop</h1>
+            <p class="page-subtitle">Exchange your hard-earned Eco Coins for sustainable perks.</p>
+        </header>
+
+        <div class="balance-card">
+            <div style="position: relative; z-index: 1;">
+                <span style="font-weight: 600; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;">Your
+                    Available Balance</span>
+                <div class="balance-amount">
+                    <span>🪙</span>
+                    <span id="shopBalance">0</span>
+                </div>
+                <p style="opacity: 0.9;">Keep completing missions to earn more!</p>
+            </div>
+        </div>
+
+        <div class="shop-grid" id="shopGrid">
+            <!-- Items injected via JS -->
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="redeemModal" class="modal"
+        style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(6, 78, 59, 0.4); backdrop-filter: blur(4px);">
+        <div class="modal-content card modal-success"
+            style="margin: 10% auto; max-width: 500px; position: relative; animation: slideIn 0.4s ease-out;">
+            <div class="confetti">🎉</div>
+            <h2 style="color: var(--forest); margin-bottom: 1rem;">Redemption Successful!</h2>
+            <p id="redeemMessage" style="color: var(--text-muted); margin-bottom: 2rem;">You have successfully claimed
+                your reward.</p>
+            <div
+                style="background: #f1f5f9; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; font-family: monospace; font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); letter-spacing: 2px;">
+                ECO-SAVE-2024-X9Y
+            </div>
+            <button class="btn btn-primary" onclick="closeRedeemModal()">Awesome!</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        checkAuth();
+
+        // Shop Items Data
+        const REWARDS = [
+            { id: 1, title: "10% Off Organic Grocery", desc: "Get a discount on your next purchase at partner organic stores.", price: 200, icon: "🥦" },
+            { id: 2, title: "Free LED Bulb Pack", desc: "Claim a pack of 2 energy-efficient LED bulbs delivered to you.", price: 500, icon: "💡" },
+            { id: 3, title: "Plant a Tree in Your Name", desc: "We will plant a sapling in a reforestation project for you.", price: 350, icon: "🌳" },
+            { id: 4, title: "Eco-Friendly Bamboo Kit", desc: "Bamboo toothbrush, straw, and cutlery set.", price: 800, icon: "🎋" },
+            { id: 5, title: "Carbon Offset Certificate", desc: "Official digital certificate for offsetting 50kg CO₂.", price: 150, icon: "📜" },
+            { id: 6, title: "Premium App Theme", desc: "Unlock the 'Midnight Forest' dark theme for this app.", price: 1000, icon: "🎨" }
+        ];
+
+        function loadShop() {
+            const user = JSON.parse(localStorage.getItem('currentUser')) || {};
+            const balance = user.ecoCoins || 0;
+
+            document.getElementById('shopBalance').textContent = balance;
+            document.getElementById('headerCoins').textContent = balance;
+
+            const grid = document.getElementById('shopGrid');
+            grid.innerHTML = REWARDS.map(item => {
+                const canAfford = balance >= item.price;
+                return `
+                    <div class="reward-card">
+                        <div class="reward-image">${item.icon}</div>
+                        <div class="reward-content">
+                            <h3 class="reward-title">${item.title}</h3>
+                            <p class="reward-desc">${item.desc}</p>
+                            <div class="reward-price">
+                                <span class="price-tag">🪙 ${item.price}</span>
+                                <button class="btn-redeem" 
+                                    onclick="redeemItem(${item.id}, ${item.price}, '${item.title}')"
+                                    ${canAfford ? '' : 'disabled'}>
+                                    ${canAfford ? 'Redeem' : 'Need More Coins'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function redeemItem(id, price, title) {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+
+            if (user.ecoCoins < price) {
+                alert("Not enough coins!");
+                return;
+            }
+
+            if (confirm(`Spend ${price} coins for "${title}"?`)) {
+                // Deduct coins
+                user.ecoCoins -= price;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+
+                // Show success
+                document.getElementById('redeemMessage').innerText = `You claimed: ${title}`;
+                document.getElementById('redeemModal').style.display = 'block';
+
+                // Refresh UI
+                loadShop();
+            }
+        }
+
+        function closeRedeemModal() {
+            document.getElementById('redeemModal').style.display = 'none';
+        }
+
+        // Initialize
+        loadShop();
+    </script>
+</body>
+
+</html>

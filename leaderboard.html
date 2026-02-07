@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Eco Track</title>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        .leaderboard-container {
+            padding-top: 3rem;
+            padding-bottom: 5rem;
+            max-width: 800px;
+        }
+
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-bottom: 4rem;
+            gap: 1.5rem;
+        }
+
+        .podium-place {
+            text-align: center;
+            position: relative;
+        }
+
+        .podium-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border: 4px solid var(--bg-white);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .podium-place.first .podium-avatar {
+            width: 100px;
+            height: 100px;
+            border-color: #ffd700;
+        }
+
+        .podium-place.second .podium-avatar {
+            border-color: #c0c0c0;
+        }
+
+        .podium-place.third .podium-avatar {
+            border-color: #cd7f32;
+        }
+
+        .podium-box {
+            background: var(--bg-white);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            width: 120px;
+            padding: 1rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .podium-place.first .podium-box {
+            height: 180px;
+            background: linear-gradient(to bottom, #ffd700, #fcd34d);
+            color: #78350f;
+        }
+
+        .podium-place.second .podium-box {
+            height: 140px;
+            background: linear-gradient(to bottom, #c0c0c0, #e2e8f0);
+            color: #334155;
+        }
+
+        .podium-place.third .podium-box {
+            height: 110px;
+            background: linear-gradient(to bottom, #cd7f32, #fdba74);
+            color: #431407;
+        }
+
+        .rank-label {
+            font-weight: 800;
+            font-size: 2rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .user-score {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .leader-list {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .leader-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .leader-item:hover {
+            background: #f8fafc;
+            transform: scale(1.01);
+        }
+
+        .leader-rank {
+            font-weight: 700;
+            width: 40px;
+            color: var(--text-muted);
+        }
+
+        .leader-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            font-weight: 600;
+        }
+
+        .leader-info {
+            flex: 1;
+        }
+
+        .leader-coins {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            color: var(--forest);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.jpg" alt="Eco Track Logo">
+                <span>Eco Track</span>
+            </a>
+            <div class="user-info">
+                <div class="coin-display" style="background: rgba(16, 185, 129, 0.1);">
+                    <span class="coin-icon">🪙</span>
+                    <span id="userCoins">0</span>
+                </div>
+                <a href="dashboard.html" class="btn btn-outline"
+                    style="padding: 0.5rem 1.2rem; font-size: 0.9rem;">Back</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container leaderboard-container">
+        <header style="text-align: center; margin-bottom: 4rem;">
+            <h1 class="page-title">Global Top Savers</h1>
+            <p class="page-subtitle">See who's making the biggest impact this week.</p>
+        </header>
+
+        <div class="podium" id="podium">
+            <!-- Injected by JS -->
+        </div>
+
+        <div class="leader-list" id="leaderList">
+            <!-- Injected by JS -->
+        </div>
+
+        <div style="margin-top: 3rem; text-align: center;">
+            <p style="color: var(--text-muted);">Rankings update every Sunday at midnight.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        checkAuth();
+
+        // Mock Leaderboard Data
+        const currentUser = JSON.parse(localStorage.getItem('currentUser')) || { name: 'You', ecoCoins: 100 };
+
+        let LEADERS = [
+            { name: "Sarah J.", coins: 2150, avatar: "👩‍🌾" },
+            { name: "Mike T.", coins: 1840, avatar: "👨‍🔧" },
+            { name: "Emma W.", coins: 1620, avatar: "👩‍🔬" },
+            { name: "David L.", coins: 1400, avatar: "👨‍💻" },
+            { name: currentUser.name || "You", coins: currentUser.ecoCoins || 100, avatar: "👤", isMe: true },
+            { name: "Priya K.", coins: 850, avatar: "👩‍🎨" },
+            { name: "Alex R.", coins: 720, avatar: "🧑‍🚀" }
+        ];
+
+        // Sort by coins desc
+        LEADERS.sort((a, b) => b.coins - a.coins);
+
+        function renderLeaderboard() {
+            const podiumEl = document.getElementById('podium');
+            const listEl = document.getElementById('leaderList');
+
+            // Top 3 Podium
+            const top3 = LEADERS.slice(0, 3);
+            podiumEl.innerHTML = `
+                <div class="podium-place second">
+                    <div class="podium-avatar">${top3[1].avatar}</div>
+                    <div class="user-name">${top3[1].name}</div>
+                    <div class="podium-box">
+                        <div class="rank-label">2</div>
+                        <div class="user-score">${top3[1].coins}</div>
+                    </div>
+                </div>
+                <div class="podium-place first">
+                    <div class="podium-avatar">👑</div>
+                    <div class="user-name">${top3[0].name}</div>
+                    <div class="podium-box">
+                        <div class="rank-label">1</div>
+                        <div class="user-score">${top3[0].coins}</div>
+                    </div>
+                </div>
+                <div class="podium-place third">
+                    <div class="podium-avatar">${top3[2].avatar}</div>
+                    <div class="user-name">${top3[2].name}</div>
+                    <div class="podium-box">
+                        <div class="rank-label">3</div>
+                        <div class="user-score">${top3[2].coins}</div>
+                    </div>
+                </div>
+            `;
+
+            // List 4-7
+            const rest = LEADERS.slice(3);
+            listEl.innerHTML = rest.map((user, index) => {
+                const rank = index + 4;
+                const isMeClass = user.isMe ? 'background: #f0fdf4; border-left: 4px solid var(--primary);' : '';
+                return `
+                    <div class="leader-item" style="${isMeClass}">
+                        <div class="leader-rank">#${rank}</div>
+                        <div class="leader-avatar">${user.avatar}</div>
+                        <div class="leader-info">
+                            <strong>${user.name}</strong> ${user.isMe ? '(You)' : ''}
+                        </div>
+                        <div class="leader-coins">
+                            <span>🪙</span> ${user.coins}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('userCoins').textContent = currentUser.ecoCoins;
+        }
+
+        renderLeaderboard();
+    </script>
+</body>
+
+</html>

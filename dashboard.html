@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Eco Track</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* Specific Dashboard Enhancements */
+        .dashboard-container {
+            padding-top: 3rem;
+            padding-bottom: 5rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Action Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .action-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-main);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-icon {
+            font-size: 2.5rem;
+            background: var(--sage);
+            width: fit-content;
+            padding: 1rem;
+            border-radius: 1rem;
+            transition: var(--transition);
+        }
+
+        .action-card:hover .action-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: var(--primary-light);
+        }
+
+        .action-card h3 {
+            font-size: 1.3rem;
+            margin-top: 0.5rem;
+        }
+
+        .action-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--forest);
+            padding: 3rem;
+            border-radius: var(--radius-lg);
+            color: var(--bg-white);
+            margin-bottom: 4rem;
+            box-shadow: var(--shadow-strong);
+        }
+
+        .stats-section h3 {
+            color: var(--bg-white);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .stat-card.highlight {
+            background: var(--primary);
+            border-color: var(--accent);
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            margin-bottom: 4rem;
+            background: linear-gradient(to right bottom, var(--bg-white), var(--sage));
+        }
+
+        .upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .upload-area:hover {
+            background: var(--bg-white);
+            border-color: var(--primary-dark);
+        }
+
+        .upload-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 1.5rem;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Lifestyle Section Highlighting */
+        .highlight-card {
+            border: 2px solid var(--primary);
+            background: var(--sage);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(6, 78, 59, 0.4);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 5% auto;
+            max-width: 800px;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 2rem;
+            top: 2rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--forest);
+        }
+
+        form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        form select,
+        form input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            font-family: inherit;
+        }
+
+        form select:focus,
+        form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--sage);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.jpg" alt="Eco Track Logo">
+                <span>Eco Track</span>
+            </a>
+            <div class="user-info">
+                <div class="coin-display" id="coinBalance" onclick="redeemCoins()" title="Click to Redeem"
+                    style="cursor: pointer;">
+                    <span class="coin-icon">🪙</span>
+                    <span id="userCoins">100</span>
+                </div>
+                <span id="welcomeUser">Welcome, explorer!</span>
+                <button class="btn btn-outline" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;"
+                    onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container dashboard-container">
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">Personal Impact Hub</h1>
+                <p class="page-subtitle">Track, analyze, and reduce your environmental footprint.</p>
+                <div class="badge-container" id="userBadges">
+                    <!-- Badges injected here -->
+                </div>
+            </div>
+            <div class="card"
+                style="padding: 1.5rem; border-left: 5px solid var(--accent); max-width: 400px; width: 100%;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="font-weight: 700; font-size: 0.9rem; color: var(--forest);">WEEKLY PROGRESS</span>
+                    <span id="weeklyReductionText" style="font-weight: 700; color: var(--primary);">0% reduction</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="weeklyProgressBar" style="width: 0%;"></div>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Reduce vs last week to earn bonus
+                    coins!</p>
+            </div>
+        </header>
+
+
+
+        <!-- Analysis Results Modal -->
+        <div id="analysisModal" class="modal">
+            <div class="modal-content card">
+                <span class="close" onclick="closeAnalysisModal()">&times;</span>
+                <h2 style="font-size: 2rem; margin-bottom: 1.5rem;">📊 Bill Analysis Complete</h2>
+
+                <div class="analysis-summary"
+                    style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                    <div class="stat-card" style="background: var(--sage); color: var(--forest); padding: 1rem;">
+                        <small style="text-transform: uppercase; font-size: 0.7rem; font-weight: 700;">Est.
+                            Impact</small>
+                        <div class="value" id="resEmissions"
+                            style="font-size: 1.6rem; font-weight: 800; color: var(--primary-dark);">0 kg</div>
+                    </div>
+                    <div class="stat-card" style="background: #f1f5f9; color: #475569; padding: 1rem;">
+                        <small style="text-transform: uppercase; font-size: 0.7rem; font-weight: 700;">Status vs
+                            Avg</small>
+                        <div class="value" id="resStatusPill"
+                            style="font-size: 1.1rem; font-weight: 800; margin-top: 0.3rem;">Analyzing...</div>
+                    </div>
+                    <div class="stat-card" style="background: #ecfdf5; color: #065f46; padding: 1rem;">
+                        <small style="text-transform: uppercase; font-size: 0.7rem; font-weight: 700;">Main
+                            Cause</small>
+                        <div class="value" id="resMainCause"
+                            style="font-size: 1.1rem; font-weight: 800; margin-top: 0.3rem; text-transform: capitalize;">
+                            -</div>
+                    </div>
+                </div>
+
+                <div id="resHistoryNote"
+                    style="text-align: center; margin-bottom: 1.5rem; font-weight: 700; color: var(--forest); font-size: 0.95rem;">
+                    <!-- Comparison message injected here -->
+                </div>
+
+                <div id="resFeedback" style="text-align: center; margin-bottom: 2rem;">
+                    <!-- Usage message injected here -->
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">Detected Items</h3>
+                        <div id="resItems" class="items-list"
+                            style="max-height: 250px; overflow-y: auto; padding-right: 1rem;">
+                            <!-- Items injected here -->
+                        </div>
+                    </div>
+                    <div id="tipsSection">
+                        <h3 style="color: var(--forest); margin-bottom: 1rem;">Personalized Tips</h3>
+                        <div id="resTips">
+                            <!-- Reduction tips injected here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 3rem; display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button class="btn btn-primary" style="padding: 1rem 2rem;" onclick="confirmAnalysis()">💾 Save to
+                        History</button>
+                    <button class="btn btn-outline" style="padding: 1rem 2rem;"
+                        onclick="closeAnalysisModal()">Discard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Grid -->
+        <div class="action-grid">
+            <a href="calculator.html?type=grocery" class="card action-card">
+                <span class="action-icon">🛒</span>
+                <h3>Grocery Tracker</h3>
+                <p>Log items manually or let our AI analyze your grocery patterns.</p>
+            </a>
+
+            <a href="calculator.html?type=electricity" class="card action-card">
+                <span class="action-icon">⚡</span>
+                <h3>Electricity Usage</h3>
+                <p>Track your power consumption and identify major energy drains.</p>
+            </a>
+
+            <a href="calculator.html?type=gas" class="card action-card">
+                <span class="action-icon">🔥</span>
+                <h3>Gas Consumption</h3>
+                <p>Monitor LPG or PNG usage to understand heating impacts.</p>
+            </a>
+
+            <a href="suggestions.html" class="card action-card">
+                <span class="action-icon">🌿</span>
+                <h3>Daily Missions</h3>
+                <p>View your personalized reduction checklist and earning points.</p>
+            </a>
+
+            <a href="graph.html" class="card action-card">
+                <span class="action-icon">📈</span>
+                <h3>Visual Insights</h3>
+                <p>See before & after comparisons and distribution of your impact.</p>
+            </a>
+
+            <div class="card action-card highlight-card" onclick="openLifestyleModal()" style="cursor: pointer;">
+                <span class="action-icon" style="background: var(--primary-dark); color: white;">🏡</span>
+                <h3>Lifestyle Baseline</h3>
+                <p>No bills? Quick 2-minute assessment of your monthly footprint.</p>
+            </div>
+
+            <a href="leaderboard.html" class="card action-card">
+                <span class="action-icon" style="background: #fbbf24; color: #78350f;">🏆</span>
+                <h3>Top Savers</h3>
+                <p>Check your rank against the global community of eco-warriors.</p>
+            </a>
+        </div>
+
+        <!-- Lifestyle Modal -->
+        <div id="lifestyleModal" class="modal">
+            <div class="modal-content card" style="max-width: 600px;">
+                <span class="close" onclick="closeLifestyleModal()">&times;</span>
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">Lifestyle Assessment</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">Help us calibrate your baseline by answering
+                    these simple questions.</p>
+
+                <form id="lifestyleForm">
+                    <div class="form-group">
+                        <label>Household Size</label>
+                        <select id="lsHousehold">
+                            <option value="1">I live alone</option>
+                            <option value="2">2-3 People</option>
+                            <option value="4">4+ People</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Primary Diet</label>
+                        <select id="lsDiet">
+                            <option value="veg">Vegetarian / Vegan</option>
+                            <option value="mixed">Mixed (Meat sometimes)</option>
+                            <option value="nonveg">Non-Vegetarian (Heavy meat intake)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Energy Intensity</label>
+                        <select id="lsElectricity">
+                            <option value="low">Minimalist (Basic light/fans)</option>
+                            <option value="medium">Standard (Moderate AC use)</option>
+                            <option value="high">Intensive (Multiple ACs or high-drain devices)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cooking Source</label>
+                        <select id="lsFuel">
+                            <option value="lpg">LPG Cylinder</option>
+                            <option value="png">Piped Gas (PNG)</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary"
+                        style="width: 100%; margin-top: 1rem; padding: 1.2rem;" onclick="submitLifestyle()">Generate
+                        Baseline Estimation</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quick Stats Section -->
+        <div class="stats-section">
+            <h3>Impact Scoreboard</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="dailyEmissions">0</span>
+                    <span class="stat-label">KG Today</span>
+                </div>
+                <div class="stat-card highlight">
+                    <span class="stat-value" id="monthlyEmissions">0</span>
+                    <span class="stat-label">KG This Month</span>
+                    <div id="benchmarkStatusPill" class="status-pill status-low"
+                        style="margin-top: 1rem; display: inline-block;">Below Average</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="yearlyEmissions">0</span>
+                    <span class="stat-label">KG Annual Est.</span>
+                </div>
+            </div>
+
+            <div class="stats-grid" style="margin-top: 2rem;">
+                <div class="stat-card">
+                    <span class="stat-value" id="tasksCompleted">0</span>
+                    <span class="stat-label">Tasks Done</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="daysTracked">0</span>
+                    <span class="stat-label">Active Days</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="highestContributor" style="font-size: 1.5rem;">Detecting...</span>
+                    <span class="stat-label">Key Contributor</span>
+                </div>
+            </div>
+
+            <!-- Timeline History -->
+            <div class="card"
+                style="margin-top: 3rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <h3 style="color: var(--bg-white); margin-bottom: 2rem;">📋 Recent History Timeline</h3>
+                <div class="timeline" id="historyTimeline">
+                    <!-- History entries as markers -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Rewards Modal -->
+        <div id="welcomeModal" class="modal">
+            <div class="modal-content card" style="text-align: center; padding: 4rem 3rem;">
+                <span style="font-size: 5rem; display: block; margin-bottom: 1rem;">🎉</span>
+                <h2 style="font-size: 2.5rem; color: var(--forest); margin-bottom: 1rem;">Welcome to Eco Track!</h2>
+                <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem;">You've earned <strong>100
+                        Eco Coins</strong> for getting started on your sustainability journey.</p>
+                <div class="coin-display"
+                    style="justify-content: center; margin-bottom: 3rem; font-size: 2rem; padding: 1rem 2rem;">
+                    <span class="coin-icon">🪙</span> 100
+                </div>
+                <button class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.2rem;"
+                    onclick="closeWelcomeModal()">Let's Go!</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Check if user is logged in
+        checkAuth();
+
+        // Load dashboard data
+        loadDashboard();
+    </script>
+</body>
+
+</html>
